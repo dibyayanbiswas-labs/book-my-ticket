@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ChaiCode Cinema</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-800 min-h-screen p-8">
+
+    <!-- Auth Section -->
+    <div id="auth-section">
+        <div class="text-center mb-8">
+          <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 mb-4 tracking-tight">
+            ChaiCode Cinema
+          </h1>
+          <p class="text-slate-400 text-lg">Login to book your seats</p>
+        </div>
+
+        <div class="flex justify-center gap-4 mb-6">
+          <button id="show-login" class="px-6 py-2 rounded-full bg-emerald-500 text-white font-semibold hover:bg-emerald-400 transition">Login</button>
+          <button id="show-register" class="px-6 py-2 rounded-full bg-slate-700 text-white font-semibold hover:bg-slate-600 transition">Register</button>
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form" class="max-w-md mx-auto space-y-4">
+          <input id="login-email" type="text" placeholder="Email or Username" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"/>
+          <input id="login-password" type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"/>
+          <button id="login-btn" class="w-full py-3 rounded-xl bg-emerald-500 text-white font-bold hover:bg-emerald-400 transition">Login</button>
+        </div>
+
+        <!-- Register Form -->
+        <div id="register-form" class="max-w-md mx-auto space-y-4 hidden">
+          <input id="reg-name" type="text" placeholder="Full Name" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"/>
+          <input id="reg-email" type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"/>
+          <input id="reg-password" type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl bg-slate-700 border border-slate-600 text-white placeholder-slate-400 focus:outline-none focus:border-emerald-500"/>
+          <button id="register-btn" class="w-full py-3 rounded-xl bg-emerald-500 text-white font-bold hover:bg-emerald-400 transition">Register</button>
+        </div>
+    </div>
+
+    <!-- Logout Button -->
+    <div class="flex justify-end mb-4 hidden" id="logout-btn">
+        <button class="px-6 py-2 rounded-full bg-rose-500 text-white font-semibold hover:bg-rose-400 transition">Logout</button>
+    </div>
+
+    <!-- Cinema Section -->
+    <div id="cinema-section" class="hidden">
+        <div class="text-center mb-10">
+          <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-400 mb-4 tracking-tight">
+            ChaiCode Cinema - Now Showing<br/><br/>
+            <span class="text-red-400 font-bold">Dhurandhar</span>
+          </h1>
+          <p class="text-slate-400 text-lg">Ghayal ho, isliye Ghatak ho?</p>
+        </div>
+
+        <div class="flex justify-center mb-10">
+          <div class="bg-slate-900/50 rounded-full px-6 py-3 border border-slate-700 flex gap-8 items-center">
+            <div class="flex items-center gap-3">
+              <div class="w-4 h-4 rounded-full bg-emerald-500 shadow-[0_0_12px_rgba(16,185,129,0.6)]"></div>
+              <span class="text-slate-300 font-medium tracking-wide">Available</span>
+            </div>
+            <div class="w-px h-6 bg-slate-700"></div>
+            <div class="flex items-center gap-3">
+              <div class="w-4 h-4 rounded-full bg-rose-500/20 border border-rose-500/50"></div>
+              <span class="text-slate-400 font-medium tracking-wide">Booked</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-center">
+          <div class="bg-slate-900/40 p-8 rounded-2xl border border-slate-700/50 shadow-inner">
+            <table id="tbl" class="border-separate border-spacing-4 mx-auto"></table>
+          </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
