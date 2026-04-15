@@ -55,11 +55,11 @@ document.getElementById("show-register").addEventListener("click", () => {
 
 // ─── Register ─────────────────────────────────────────────────
 document.getElementById("register-btn").addEventListener("click", async () => {
-    const name = document.getElementById("reg-name").value.trim();
+    const username = document.getElementById("reg-name").value.trim();
     const email = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
 
-    if (!name || !email || !password) {
+    if (!username || !email || !password) {
         showError("register-form-error", "Please fill in all fields");
         return;
     }
@@ -67,7 +67,7 @@ document.getElementById("register-btn").addEventListener("click", async () => {
     const res = await fetch("/api/v1/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ username, email, password }),
     });
 
     const data = await res.json();
@@ -89,10 +89,10 @@ document.getElementById("register-btn").addEventListener("click", async () => {
 
 // ─── Login ────────────────────────────────────────────────────
 document.getElementById("login-btn").addEventListener("click", async () => {
-    const email = document.getElementById("login-email").value.trim();
+    const identifier = document.getElementById("login-identifier").value.trim();
     const password = document.getElementById("login-password").value;
 
-    if (!email || !password) {
+    if (!identifier || !password) {
         showError("login-form-error", "Please fill in all fields");
         return;
     }
@@ -100,14 +100,14 @@ document.getElementById("login-btn").addEventListener("click", async () => {
     const res = await fetch("/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ identifier, password }),
     });
 
     const data = await res.json();
 
     if (!res.ok) {
         if (res.status === 401) {
-            showError("login-form-error", "Invalid email or password");
+            showError("login-form-error", "Invalid username/email or password");
         } else if (res.status === 404) {
             showError("login-form-error", "User not found. Please register first");
         } else {
