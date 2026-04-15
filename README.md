@@ -86,6 +86,8 @@ JWT_ACCESS_EXPIRES_IN=30m
 JWT_REFRESH_SECRET_KEY=your_refresh_secret_key
 JWT_REFRESH_EXPIRES_IN=1d
 
+CORS_ORIGIN=*
+
 ```
 
 ### 4. Start the database
