@@ -1,12 +1,27 @@
-// state
+// ─── State ────────────────────────────────────────────────────
 let token = localStorage.getItem("token");
 
-// dom references
+// ─── DOM References ───────────────────────────────────────────
 const authSection = document.getElementById("auth-section");
 const cinemaSection = document.getElementById("cinema-section");
 const logoutBtn = document.getElementById("logout-btn");
 
-// auth ui toggle
+// ─── Helpers ──────────────────────────────────────────────────
+function showError(elementId, message) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.innerHTML = `<p class="text-rose-400 text-sm mt-2 text-center">${message}</p>`;
+    setTimeout(() => (el.innerHTML = ""), 5000);
+}
+
+function showSuccess(elementId, message) {
+    const el = document.getElementById(elementId);
+    if (!el) return;
+    el.innerHTML = `<p class="text-emerald-400 text-sm mt-2 text-center">${message}</p>`;
+    setTimeout(() => (el.innerHTML = ""), 5000);
+}
+
+// ─── Auth UI Toggle ───────────────────────────────────────────
 function showCinema() {
     authSection.classList.add("hidden");
     cinemaSection.classList.remove("hidden");
@@ -20,61 +35,84 @@ function showAuth() {
     logoutBtn.classList.add("hidden");
 }
 
-// onLoad
+// ─── On Load ──────────────────────────────────────────────────
 if (token) {
     showCinema();
 } else {
     showAuth();
 }
 
-// show login page
+// ─── Tab Toggle ───────────────────────────────────────────────
 document.getElementById("show-login").addEventListener("click", () => {
     document.getElementById("login-form").classList.remove("hidden");
     document.getElementById("register-form").classList.add("hidden");
 });
 
-// show register page
 document.getElementById("show-register").addEventListener("click", () => {
     document.getElementById("register-form").classList.remove("hidden");
     document.getElementById("login-form").classList.add("hidden");
 });
 
-// register api call
+// ─── Register ─────────────────────────────────────────────────
 document.getElementById("register-btn").addEventListener("click", async () => {
-    const username = document.getElementById("reg-name").value;
-    const email = document.getElementById("reg-email").value;
+    const name = document.getElementById("reg-name").value.trim();
+    const email = document.getElementById("reg-email").value.trim();
     const password = document.getElementById("reg-password").value;
+
+    if (!name || !email || !password) {
+        showError("register-form-error", "Please fill in all fields");
+        return;
+    }
 
     const res = await fetch("/api/v1/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ name, email, password }),
     });
 
     const data = await res.json();
+
     if (!res.ok) {
-        alert(data.error || "Registration failed");
+        if (res.status === 409) {
+            showError("register-form-error", "Email already registered. Please login instead");
+        } else if (res.status === 400) {
+            showError("register-form-error", data.error || "Invalid input. Please check your details");
+        } else {
+            showError("register-form-error", "Registration failed. Please try again");
+        }
         return;
     }
 
-    alert("Registered! Please login.");
+    showSuccess("register-form-error", "Registered successfully! Please login");
     document.getElementById("show-login").click();
 });
 
-// login api call
+// ─── Login ────────────────────────────────────────────────────
 document.getElementById("login-btn").addEventListener("click", async () => {
-    const identifier = document.getElementById("login-email").value;
+    const email = document.getElementById("login-email").value.trim();
     const password = document.getElementById("login-password").value;
+
+    if (!email || !password) {
+        showError("login-form-error", "Please fill in all fields");
+        return;
+    }
 
     const res = await fetch("/api/v1/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ identifier, password }),
+        body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
+
     if (!res.ok) {
-        alert(data.error || "Login failed");
+        if (res.status === 401) {
+            showError("login-form-error", "Invalid email or password");
+        } else if (res.status === 404) {
+            showError("login-form-error", "User not found. Please register first");
+        } else {
+            showError("login-form-error", data.error || "Login failed. Please try again");
+        }
         return;
     }
 
@@ -83,19 +121,14 @@ document.getElementById("login-btn").addEventListener("click", async () => {
     showCinema();
 });
 
-// logout api call
-logoutBtn.addEventListener("click", async () => {
-    await fetch("/api/v1/auth/logout", {
-        method: "POST",
-        headers: { "Authorization": `Bearer ${token}` },
-    });
-
+// ─── Logout ───────────────────────────────────────────────────
+document.getElementById("logout-action").addEventListener("click", () => {
     localStorage.removeItem("token");
     token = null;
     showAuth();
 });
 
-// load all seats
+// ─── Load Seats ───────────────────────────────────────────────
 async function loadSeats() {
     const tbl = document.getElementById("tbl");
     tbl.innerHTML = "";
@@ -107,6 +140,7 @@ async function loadSeats() {
     let tr;
     for (let i = 0; i < sortedSeatArray.length; i++) {
         if (i % 8 === 0) tr = document.createElement("tr");
+
         const td = document.createElement("td");
         const baseClasses = "w-32 h-32 rounded-2xl text-center align-middle text-2xl font-bold transition-all duration-300 select-none relative group";
 
@@ -132,8 +166,16 @@ async function loadSeats() {
             });
 
             const data = await res.json();
+
             if (!res.ok) {
-                alert(data.error || "Booking failed");
+                if (res.status === 401) {
+                    showError("login-form-error", "Session expired. Please login again");
+                    localStorage.removeItem("token");
+                    token = null;
+                    showAuth();
+                } else {
+                    alert(data.error || "Booking failed");
+                }
                 return;
             }
 

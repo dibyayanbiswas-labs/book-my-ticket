@@ -25,9 +25,9 @@ model User {
 }
 
 model Seat {
-  id Int @id @default(autoincrement())
-  username String?
-  isBooked Int @default(0)
+  id       Int       @id @default(autoincrement())
+  number   Int       @unique
+  isBooked Boolean   @default(false)
   bookings Booking[]
 
   @@map("seat")

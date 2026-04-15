@@ -14,7 +14,7 @@ class SeatService {
             async (tx) => {
                 // SELECT * FROM seats WHERE id = $1 AND isbooked = 0 FOR UPDATE
                 const seat = await tx.seat.findFirst({
-                    where: { id: seatId, isBooked: 0},
+                    where: { id: seatId, isBooked: false},
                 });
 
                 // if (result.rowCount === 0)
@@ -27,7 +27,7 @@ class SeatService {
                 // UPDATE seats SET isbooked = 1, name = $2 WHERE id = $1
                 await tx.seat.update({
                     where: {id: seatId},
-                    data: {isBooked: 1, username: user!.username},
+                    data: {isBooked: true, username: user!.username},
                 });
 
                 // associate booking with user
