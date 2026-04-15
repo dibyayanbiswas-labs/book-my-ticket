@@ -28,7 +28,7 @@ async function main() {
 
     // seed 30 seats
     const seats = Array.from({ length: 30 }, (_, i) => ({
-        number: i + 1,
+        username: null,
         isBooked: false
     }));
 

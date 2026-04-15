@@ -27,7 +27,7 @@ class SeatService {
                 // UPDATE seats SET isbooked = 1, name = $2 WHERE id = $1
                 await tx.seat.update({
                     where: {id: seatId},
-                    data: {isBooked: true, username: user!.username},
+                    data: {isBooked: true, username: user?.username},
                 });
 
                 // associate booking with user
